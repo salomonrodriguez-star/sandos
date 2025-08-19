@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>¡Ya casi Sandos! — Cuenta regresiva</title>
+<meta name="theme-color" content="#0a0f1f" />
+<meta name="description" content="Cuenta regresiva al viaje a Sandos Playacar (13–21 sep 2025). Añádelo al calendario y comparte el link.">
+<link rel="icon" href="./favicon.ico">
+<meta property="og:title" content="¡Ya casi Sandos!">
+<meta property="og:description" content="Cuenta regresiva al viaje a Sandos Playacar (13–21 sep 2025).">
+<meta property="og:type" content="website">
+<meta property="og:image" content="./og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root{
+    --sky1:#FFB199; --sky2:#FFD9A0; --sky3:#87CEEB;
+    --sea:#3DB2FF; --sand:#F7E0A1; --text:#1F2A2E; --glass:rgba(255,255,255,.45);
+    --stroke:rgba(255,255,255,.55); --white:#fff; --accent:#ff7f50;
+  }
+  *{box-sizing:border-box} html,body{height:100%}
+  body{
+    margin:0; font-family: ui-rounded, ui-sans-serif, system-ui, -apple-system, "SF Pro Rounded", "Segoe UI", Roboto, "Helvetica Neue", Inter, Arial;
+    color:var(--text); background: linear-gradient(180deg, var(--sky1), var(--sky2) 40%, var(--sky3) 80%);
+    overflow-x:hidden;
+  }
+  /* Waves */
+  .waves{
+    position:fixed; inset:auto 0 0 0; height:40vh; pointer-events:none; z-index:-1;
+    background: linear-gradient(180deg, var(--sea) 0%, #2F9FE6 60%, #1C7FC0 100%);
+    clip-path: path("M0,120 C180,180 360,60 540,120 C720,180 900,60 1080,120 L1080,400 L0,400 Z");
+    animation: swell 10s ease-in-out infinite alternate;
+    opacity:.95;
+  }
+  @keyframes swell{ to{ transform: translateY(18px) } }
+  .beach{
+    position:fixed; inset:auto 0 0 0; height:18vh; background: var(--sand);
+    z-index:0; box-shadow: 0 -20px 80px rgba(0,0,0,.18) inset;
+  }
+  /* Palms */
+  .palm{
+    position:fixed; bottom:12vh; left:2vw; width:120px; height:180px; z-index:0; opacity:.5;
+  }
+  .palm.right{ left:auto; right:2vw; transform:scaleX(-1) }
+  .wrap{
+    min-height:100dvh;
+    padding: max(16px, env(safe-area-inset-top)) clamp(16px, 5vw, 32px) max(24px, env(safe-area-inset-bottom));
+    display:flex; flex-direction:column; gap:24px; align-items:center; justify-content:space-between;
+  }
+  header{ width:100%; max-width:880px; margin-inline:auto; text-align:center; display:grid; gap:10px; }
+  .badge{
+    display:inline-flex; align-items:center; gap:8px; margin:auto;
+    padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.6);
+    background:rgba(255,255,255,.55); backdrop-filter: blur(10px);
+    font-size:.92rem; color:#11424f; font-weight:700;
+  }
+  .title{
+    font-size: clamp(1.8rem, 5vw + .2rem, 3.2rem);
+    line-height:1.1; font-weight:900; letter-spacing:.2px; color:#0e3440;
+    text-shadow:0 2px 0 rgba(255,255,255,.6);
+  }
+  .subtitle{ color:#184d5b; font-size: clamp(1rem, 2.6vw + .2rem, 1.25rem); }
+  .counter{
+    width:100%; max-width:880px; margin: 6px auto 0; display:grid; gap:12px;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+  }
+  @media (max-width:720px){ .counter{grid-template-columns: repeat(2, minmax(0,1fr));} }
+  .card{
+    position:relative; isolation:isolate; padding:18px 14px; border-radius:18px;
+    border:1px solid rgba(255,255,255,.7);
+    background: rgba(255,255,255,.7);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 16px 50px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.6);
+    transition: transform .2s ease;
+  }
+  .card:hover{ transform: translateY(-2px) }
+  .num{
+    font-variant-numeric: tabular-nums; font-weight:900; color:#0c3a46;
+    font-size: clamp(2rem, 7vw, 3.1rem);
+    letter-spacing:.5px; display:flex; align-items:baseline; gap:6px;
+  }
+  .num small{font-size: clamp(.9rem, 2.4vw, 1.1rem); opacity:.9; font-weight:800; color:#1a5563}
+  .label{margin-top:8px; color:#1e5f6e; font-size:.95rem; letter-spacing:.4px}
+  .ring{ --size: 120px; width:var(--size); height:var(--size); margin:auto; position:relative; }
+  .ring svg{position:absolute; inset:0; transform:rotate(-90deg)}
+  .ring .value{ position:absolute; inset:0; display:grid; place-items:center; font-weight:900; letter-spacing:.4px; color:#0c3a46 }
+  .actions{display:grid; gap:10px; width:100%; max-width:880px; margin: 8px auto 0;}
+  @media (min-width:640px){ .actions{grid-template-columns:1.2fr .8fr .8fr;} }
+  .btn{
+    appearance:none; cursor:pointer; border:1px solid rgba(255,255,255,.7);
+    border-radius:14px; padding:14px 16px; width:100%;
+    background: rgba(255,255,255,.72);
+    color:#0e3440; font-weight:900; letter-spacing:.3px; font-size:1.02rem;
+    box-shadow: 0 12px 30px rgba(0,0,0,.15);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{ transform: translateY(-1px); box-shadow: 0 18px 40px rgba(0,0,0,.2) }
+  .btn:active{ transform: translateY(0); }
+  .btn.alt{ background: rgba(255,255,255,.56); font-weight:800 }
+  .btn span.badge-mini{
+    margin-left:8px; font-size:.78rem; color:#fff; background:var(--accent); border-radius:999px; padding:2px 8px; font-weight:900;
+  }
+  footer{opacity:.9; font-size:.92rem; text-align:center; margin-top:14px; color:#184d5b }
+  footer a{color:#0e3440; text-decoration-color: rgba(14,52,64,.4)}
+  .tap-cue{font-size:.95rem; color:#184d5b; text-align:center; margin-top:8px}
+</style>
+</head>
+<body>
+<!-- Decorative elements -->
+<div class="waves"></div>
+<div class="beach"></div>
+<svg class="palm" viewBox="0 0 120 180" aria-hidden="true">
+  <path d="M60,180 C70,120 62,80 70,40" stroke="#3b2f1c" stroke-width="8" fill="none"/>
+  <path d="M70,40 C90,22 110,22 116,40 C95,38 88,42 70,40 Z" fill="#2E8B57"/>
+  <path d="M70,48 C50,30 30,30 14,44 C35,42 42,48 70,48 Z" fill="#2E8B57"/>
+</svg>
+<svg class="palm right" viewBox="0 0 120 180" aria-hidden="true">
+  <path d="M60,180 C70,120 62,80 70,40" stroke="#3b2f1c" stroke-width="8" fill="none"/>
+  <path d="M70,40 C90,22 110,22 116,40 C95,38 88,42 70,40 Z" fill="#2E8B57"/>
+  <path d="M70,48 C50,30 30,30 14,44 C35,42 42,48 70,48 Z" fill="#2E8B57"/>
+</svg>
+
+<canvas id="confetti" style="position:fixed; inset:0; pointer-events:none; z-index:5;"></canvas>
+
+<div class="wrap" id="wrap">
+  <header id="hero">
+    <div class="badge">🏖️ Sandos Playacar • Playa del Carmen</div>
+    <h1 class="title">¡Ya casi estamos en la playa! 🏝️</h1>
+    <p class="subtitle">Del <strong>13</strong> al <strong>21 de septiembre de 2025</strong> · En tu horario local.</p>
+  </header>
+
+  <section class="counter" id="counter">
+    <div class="card" data-tilt>
+      <div class="num"><span id="days">00</span><small>días</small></div>
+      <div class="label">faltan</div>
+    </div>
+    <div class="card" data-tilt>
+      <div class="num"><span id="hours">00</span><small>h</small></div>
+      <div class="label">horas</div>
+    </div>
+    <div class="card" data-tilt>
+      <div class="num"><span id="mins">00</span><small>m</small></div>
+      <div class="label">minutos</div>
+    </div>
+    <div class="card" data-tilt>
+      <div class="num"><span id="secs">00</span><small>s</small></div>
+      <div class="label">segundos</div>
+    </div>
+  </section>
+
+  <section class="ring" aria-label="Progreso">
+    <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+      <defs>
+        <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ff7f50"/>
+          <stop offset="100%" stop-color="#ffc371"/>
+        </linearGradient>
+      </defs>
+      <circle cx="60" cy="60" r="52" stroke="rgba(255,255,255,.5)" stroke-width="10" fill="none"/>
+      <circle id="progressArc" cx="60" cy="60" r="52" stroke="url(#grad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327" fill="none"/>
+    </svg>
+    <div class="value"><span id="percent">0%</span><div style="font-size:.8rem; color:#184d5b; margin-top:2px">de la espera</div></div>
+  </section>
+
+  <p class="tap-cue">Tip: toca para celebrar 🎉</p>
+
+  <section class="actions">
+    <button class="btn" id="btnGoogle">Añadir a Google Calendar <span class="badge-mini">all-day</span></button>
+    <button class="btn alt" id="btnOutlook">Añadir a Outlook</button>
+    <a class="btn alt" id="btnICS" download="sandos-2025.ics" href="./sandos-2025.ics">Descargar .ics</a>
+  </section>
+
+  <footer>
+    Hecho con amor para el trip 🫶 · <a href="#" id="shareLink">Compartir</a>
+  </footer>
+</div>
+
+<script>
+  // --- Dates (robust local dates; no timezone strings) ---
+  const tripStart = new Date(2025, 8, 13, 0, 0, 0); // 13 Sep 2025 local (monthIndex 8)
+  const tripEndExclusive = new Date(2025, 8, 22, 0, 0, 0); // exclusive end
+
+  // 90-day progress window
+  const windowDays = 90;
+  const windowStart = new Date(tripStart.getTime() - windowDays*86400000);
+
+  const $ = (id)=>document.getElementById(id);
+  const daysEl=$("days"), hoursEl=$("hours"), minsEl=$("mins"), secsEl=$("secs");
+  const percentEl=$("percent"), arc=$("progressArc");
+  const dashTotal = 2*Math.PI*52;
+  function pad(n){return String(n).padStart(2,"0")}
+
+  function update(){
+    const now = new Date();
+    if(now >= tripStart && now < tripEndExclusive){
+      daysEl.textContent = hoursEl.textContent = minsEl.textContent = secsEl.textContent = "00";
+      document.querySelector(".subtitle").innerHTML = "¡🧳 Estás en Sandos ahora mismo! Disfruta cada momento.";
+      percentEl.textContent = "100%";
+      arc.style.strokeDashoffset = 0;
+      return;
+    } else if (now >= tripEndExclusive){
+      document.querySelector(".subtitle").innerHTML = "El viaje terminó. ¡A planear el siguiente! ✈️";
+      daysEl.textContent = hoursEl.textContent = minsEl.textContent = secsEl.textContent = "00";
+      percentEl.textContent = "100%";
+      arc.style.strokeDashoffset = 0;
+      return;
+    }
+    const diffMs = tripStart - now;
+    const totalSec = Math.max(0, Math.floor(diffMs/1000));
+    const d = Math.floor(totalSec / 86400);
+    const h = Math.floor((totalSec % 86400) / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
+    daysEl.textContent = pad(d);
+    hoursEl.textContent = pad(h);
+    minsEl.textContent = pad(m);
+    secsEl.textContent = pad(s);
+
+    const clamped = Math.min(Math.max(now - windowStart, 0), tripStart - windowStart);
+    const pct = (clamped / (tripStart - windowStart)) * 100;
+    percentEl.textContent = Math.round(pct) + "%";
+    const dashOffset = dashTotal * (1 - pct/100);
+    arc.style.strokeDasharray = dashTotal;
+    arc.style.strokeDashoffset = dashOffset;
+
+    requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+
+  // Tilt cards (gentle)
+  document.querySelectorAll("[data-tilt]").forEach(card=>{
+    card.addEventListener("pointermove", (e)=>{
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left)/r.width - .5;
+      const y = (e.clientY - r.top)/r.height - .5;
+      card.style.transform = `rotateX(${(-y*4)}deg) rotateY(${(x*4)}deg)`;
+    }, {passive:true});
+    card.addEventListener("pointerleave", ()=>card.style.transform="");
+  });
+
+  // Confetti
+  const canvas = document.getElementById("confetti");
+  const ctx = canvas.getContext("2d");
+  let W, H, pieces=[];
+  function resize(){ W = canvas.width = innerWidth * devicePixelRatio; H = canvas.height = innerHeight * devicePixelRatio; }
+  addEventListener("resize", resize); resize();
+
+  function burst(x,y, power=16){
+    const n = 120;
+    for(let i=0;i<n;i++){
+      const a = Math.random()*2*Math.PI;
+      const v = power*(.6 + Math.random()*1.1);
+      pieces.push({
+        x:x*devicePixelRatio, y:y*devicePixelRatio,
+        vx: Math.cos(a)*v, vy: Math.sin(a)*v - (Math.random()*10+5),
+        g: .4 + Math.random()*0.8,
+        s: Math.random()*6 + 2,
+        rot: Math.random()*Math.PI, vr: (Math.random()-.5)*.2,
+        life: 60 + Math.random()*60
+      });
+    }
+  }
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=pieces.length-1;i>=0;i--){
+      const p = pieces[i];
+      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life--;
+      ctx.save();
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = `hsla(${Math.random()*360}, 90%, 60%, .9)`;
+      ctx.fillRect(-p.s/2, -p.s/2, p.s, p.s);
+      ctx.restore();
+      if(p.y>H+200 || p.x<-200 || p.x>W+200 || p.life<=0){ pieces.splice(i,1); }
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+  addEventListener("pointerdown", (e)=>{ burst(e.clientX, e.clientY, 18); }, {passive:true});
+
+  // Calendar actions
+  function enc(s){ return encodeURIComponent(s); }
+  const title = "Viaje a Sandos Playacar";
+  const locationTxt = "Sandos Playacar, Playa del Carmen";
+  const details = "¡Nos vamos a la playa! 🏖️ Del 13 al 21 de septiembre de 2025.";
+  const startYMD = "20250913";
+  const endYMD_excl = "20250922"; // all-day exclusive end
+
+  // Google Calendar
+  $("btnGoogle").addEventListener("click", ()=>{
+    const url = "https://calendar.google.com/calendar/render?action=TEMPLATE"
+      + "&text=" + enc(title)
+      + "&dates=" + startYMD + "/" + endYMD_excl
+      + "&details=" + enc(details)
+      + "&location=" + enc(locationTxt);
+    window.open(url, "_blank");
+  });
+
+  // Outlook web
+  $("btnOutlook").addEventListener("click", ()=>{
+    const url = "https://outlook.live.com/calendar/0/deeplink/compose?allday=true&path=/calendar/action/compose&rru=addevent"
+      + "&subject=" + enc(title)
+      + "&startdt=2025-09-13"
+      + "&enddt=2025-09-22"
+      + "&body=" + enc(details)
+      + "&location=" + enc(locationTxt);
+    window.open(url, "_blank");
+  });
+
+  // ICS is provided as a static file link in the HTML (anchor #btnICS)
+  // Share link
+  $("shareLink").addEventListener("click", async (e)=>{
+    e.preventDefault();
+    const shareData = {
+      title: "¡Ya casi Sandos!",
+      text: "Cuenta regresiva al viaje a Sandos Playacar (13–21 sep 2025).",
+      url: location.href
+    };
+    try{
+      if(navigator.share){
+        await navigator.share(shareData);
+      }else{
+        await navigator.clipboard.writeText(location.href);
+        alert("Enlace copiado al portapapeles ✅");
+      }
+    }catch(err){}
+  });
+</script>
+</body>
+</html>
